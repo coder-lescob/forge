@@ -1,5 +1,5 @@
-#ifndef TOKEN_FILE
-#define TOKEN_FILE
+#ifndef HEADER_TOKEN
+#define HEADER_TOKEN
 
 // The type of a token
 typedef enum {
