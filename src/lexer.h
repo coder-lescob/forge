@@ -10,7 +10,8 @@
 * marked with the type TOKEN_EOF.
 * @param str The string to tokenize
 * @returns The pointer to the array of token, 
-* which is allocated on the heap, don't forget to free it.
+* which is allocated on the heap, don't forget 
+to free it as all the tokens' strings
 */
 Token *Tokenize(char *str);
 
