@@ -7,12 +7,34 @@
 #include "token.h"
 #include "lexer.h"
 
-#define STR_LEN 100
+static size_t flen(FILE *fptr) {
+    size_t size = 0;
+    for (char c = 0; (c = fgetc(fptr)) != EOF; size++);
+    fseek(fptr, 0, SEEK_SET);
 
-int main(void) {
+    if (size > 0) size++;
+
+    return size;
+}
+
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        printf("usage: %s <filename>\n", argv[0]);
+        exit(-1);
+    }
+
+    FILE *fptr = fopen(argv[1], "r");
+
+    if (!fptr) {
+        printf("unable to open file %s\n", argv[1]);
+        exit(-1);
+    }
+
+    size_t size = flen(fptr);
+
     // get a string from the user
-    char str[STR_LEN + 1]; // + the 0 terminator
-    fgets(str, STR_LEN, stdin);
+    char *str = calloc(size + 1, sizeof(char)); // + the 0 terminator
+    fgets(str, size, fptr);
 
     // tokenize the string
     Token *tokens = Tokenize(str);
@@ -27,4 +49,5 @@ int main(void) {
     }
 
     free(tokens);
+    fclose(fptr);
 }
