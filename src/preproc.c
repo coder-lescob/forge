@@ -15,13 +15,22 @@ static PreProcStatmentType GetPreProcType(TokenType type) {
     exit(-1);
 }
 
-void PreProccess(Token *tokens) {
+static size_t GetNumTokens(Token *tokens) {
+    size_t numtokens = 0;
+    // find the end of file token
+    for (size_t i = 0; tokens[i].type != TOKEN_EOF; i++, numtokens++);
+
+    return numtokens;
+}
+
+static Stack GetPreProcStatments(Token *tokens) {
     // Create a stack of preproc statments
     Stack statments = CreateStack(500, PreProcStatment);
 
-    size_t numtokens = 0;
-    for (size_t i = 0; tokens[i].type != TOKEN_EOF; i++, numtokens++);
+    // compute the number of tokens
+    size_t numtokens = GetNumTokens(tokens);
 
+    // loop over each token
     size_t rank = 0;
     for (size_t i = 0; i < numtokens && tokens[i].type != TOKEN_EOF; i++, rank++) {
         if (rank == 0 && tokens[i].type == TOKEN_DOLLAR) {
@@ -59,19 +68,31 @@ void PreProccess(Token *tokens) {
         if (tokens[i].type == TOKEN_NWLINE) rank = 0;
     }
 
+    // return statments
+    return statments;
+}
+
+static void FreeStatment(PreProcStatment statment) {
+    for (size_t i = 0; i < statment.numtokens; i++) {
+        // free each string of each token
+        free(statment.tokens[i].word);
+    }
+
+    // free the overall tokens
+    free(statment.tokens);
+}
+
+void PreProccess(Token *tokens) {
+    // get the statments
+    Stack statments = GetPreProcStatments(tokens);
+
     for (size_t i = 0; i < statments.ptr; i++) {
         PreProcStatment s = ((PreProcStatment *)statments.data)[i];
 
+        // do substition
+
         // free every ressources
-        printf("Statment of type %d with %ld tokens (", s.type, s.numtokens);
-
-        for (size_t j = 0; j < s.numtokens; j++) {
-            printf("%s ", s.tokens[j].word);
-            free(s.tokens[j].word);
-        }
-        printf("\b) freed\n");
-
-        free(s.tokens);
+        FreeStatment(s);
     }
 
     FreeStack(statments);
