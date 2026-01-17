@@ -6,6 +6,7 @@
 // project
 #include "token.h"
 #include "lexer.h"
+#include "preproc.h"
 
 static size_t flen(FILE *fptr) {
     size_t size = 0;
@@ -23,6 +24,7 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
+    // open the file
     FILE *fptr = fopen(argv[1], "r");
 
     if (!fptr) {
@@ -30,6 +32,7 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
+    // get the length of the file
     size_t size = flen(fptr);
 
     // get a string from the user
@@ -38,6 +41,9 @@ int main(int argc, char **argv) {
 
     // tokenize the string
     Token *tokens = Tokenize(str);
+
+    // call the pre-processor
+    PreProccess(tokens);
 
     // print all of them
     for (Token *token = tokens; token->type != TOKEN_EOF; token++) {
