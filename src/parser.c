@@ -20,7 +20,7 @@ void InitSteelSyntax(void) {
     steelsyntax.nodes[0]       = (SyntaxNode) {.tokentype = TOKEN_ID, .numnext = 2, .nextNodes = calloc(2, sizeof(SyntaxNode *))};
     steelsyntax.nodes[0].nextNodes[0] = &steelsyntax.nodes[1];
     steelsyntax.nodes[0].nextNodes[1] = &steelsyntax.nodes[2];
-    
+
     steelsyntax.nodes[1]       = (SyntaxNode) {.tokentype = TOKEN_ID, .numnext = 0, .nextNodes = NULL};
     steelsyntax.nodes[2]       = (SyntaxNode) {.tokentype = TOKEN_NUMBER, .numnext = 0, .nextNodes = NULL};
     steelsyntax.symboltable[0] = &steelsyntax.nodes[0];
@@ -51,6 +51,7 @@ AST_Node *AllocatesAST_Node(AST_Node node) {
 
 static AST ParseNode(Token *token, SyntaxNode *syntaxnode) {
     if (token->type == TOKEN_EOF) return NULL;
+    if (token->type == TOKEN_NWLINE) token++;
     if (!syntaxnode) return NULL;
     if (token->type == syntaxnode->tokentype) {
         // allocate a node

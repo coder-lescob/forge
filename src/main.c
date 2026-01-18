@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 
     // print all of them
     for (Token *token = tokens; token->type != TOKEN_EOF; token++) {
-        if (token->word) {
+        if (token->word && token->type != TOKEN_NWLINE) {
             printf("Token %s of type %d\n", token->word, token->type);
         }
     }
