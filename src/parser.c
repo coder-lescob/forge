@@ -32,15 +32,11 @@ void DestroySteelSyntax(void) {
 }
 
 // allocates an AST_Node on the heap
-AST_Node *AllocatesAST_Node(int symbol, Token *tokens, size_t numtokens, AST_Node *nextnodes, size_t numnodes) {
+AST_Node *AllocatesAST_Node(AST_Node node) {
     // allocates, don't forget to free it
-    AST_Node *node = malloc(sizeof(AST_Node));
-    node->symbol    = symbol;
-    node->tokens    = tokens;
-    node->numtokens = numtokens;
-    node->nextnodes = nextnodes;
-    node->numnodes  = numnodes;
-    return node;
+    AST_Node *_node = malloc(sizeof(AST_Node));
+    *_node = node;
+    return _node;
 }
 
 // parses a list of token using syntax

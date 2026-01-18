@@ -31,9 +31,8 @@ typedef struct Syntax {
 
 // an Abstract Syntax Tree node
 typedef struct AST_Node {
-    int      symbol;
-    Token    *tokens;
-    size_t   numtokens;
+    size_t   symbol;
+    Token    *token;
     AST_Node *nextnodes;
     size_t   numnodes;
 } AST_Node;
@@ -43,9 +42,10 @@ typedef AST_Node *AST;
 
 /*
 * allocates an AST_Node on the heap don't forget to free it.
+* @param node The node to allocate.
 * @returns an pointer to an AST_Node.
 */
-AST_Node *AllocatesAST_Node(int symbol, Token *tokens, size_t numtokens, AST_Node *nextnodes, size_t numnodes);
+AST_Node *AllocatesAST_Node(AST_Node node);
 
 // the steel syntax
 extern Syntax steelsyntax;
