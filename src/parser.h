@@ -31,8 +31,13 @@ typedef struct Syntax {
 
 // an Abstract Syntax Tree node
 typedef struct AST_Node {
+    // which symbol is that node belonging to ?
     size_t   symbol;
+
+    // The token of the current node
     Token    *token;
+
+    // The next nodes of this node
     AST_Node *nextnodes;
     size_t   numnodes;
 } AST_Node;
