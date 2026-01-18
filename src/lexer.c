@@ -58,6 +58,25 @@ static void AddToken(Stack *tokens, char *word, TokenType type) {
             memcpy(token.word, word, strlen(word));
         }
 
+        // if the stack is not large enough
+        if (tokens->ptr >= tokens->size) {
+            // make it bigger !
+            // copy the old steck
+            Token *oldptr = tokens->data;
+
+            // allocates more memory for the stack
+            tokens->data  = calloc((tokens->size + 1) * 2, tokens->isize);
+
+            // copy old data into it
+            memcpy(tokens->data, oldptr, tokens->size);
+
+            // signal to the stack its new size
+            tokens->size = (tokens->size + 1) * 2;
+
+            // free the old stack
+            free(oldptr);
+        }
+
         // push it
         Push((*tokens), token, Token);
     }
