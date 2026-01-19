@@ -4,6 +4,7 @@
 #include <string.h>
 
 // project
+#include "stack.h"
 #include "token.h"
 #include "lexer.h"
 #include "preproc.h"
@@ -48,13 +49,13 @@ int main(int argc, char **argv) {
     fread(str, sizeof(char), size, fptr);
 
     // tokenize the string
-    Token *tokens = Tokenize(str);
+    Stack tokens = Tokenize(str);
 
     // call the pre-processor
-    PreProccess(tokens);
+    PreProccess(tokens.data);
 
     // print all of them
-    for (Token *token = tokens; token->type != TOKEN_EOF; token++) {
+    for (Token *token = tokens.data; token->type != TOKEN_EOF; token++) {
         if (token->word && token->type != TOKEN_NWLINE) {
             printf("Token %s of type %d\n", token->word, token->type);
         }
@@ -62,7 +63,7 @@ int main(int argc, char **argv) {
 
     InitSteelSyntax();
 
-    AST ast = Parse(tokens, &steelsyntax);
+    AST ast = Parse(tokens.data, &steelsyntax);
 
     DestroySteelSyntax();
 
@@ -71,12 +72,12 @@ int main(int argc, char **argv) {
     else
         printf("Empty ast\n");
 
-    for (Token *token = tokens; token->type != TOKEN_EOF; token++) {
+    for (Token *token = tokens.data; token->type != TOKEN_EOF; token++) {
         if (token->word) {
             free(token->word);
         }
     }
 
-    free(tokens);
+    FreeStack(tokens);
     fclose(fptr);
 }

@@ -13,6 +13,6 @@
 * which is allocated on the heap, don't forget 
 * to free it as all the tokens' strings
 */
-Token *Tokenize(char *str);
+Stack Tokenize(char *str);
 
 #endif

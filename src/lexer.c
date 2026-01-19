@@ -87,7 +87,7 @@ static void AddToken(Stack *tokens, char *word, TokenType type) {
     }
 }
 
-Token *Tokenize(char *str) {
+Stack Tokenize(char *str) {
 
     // creates a stack of 500 tokens
     Stack tokens = CreateStack(500, Token);
@@ -132,5 +132,5 @@ Token *Tokenize(char *str) {
     AddToken(&tokens, NULL, TOKEN_EOF);
 
     // returns all tokens
-    return (Token *)tokens.data;
+    return tokens;
 }
