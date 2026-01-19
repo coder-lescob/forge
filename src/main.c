@@ -54,11 +54,6 @@ int main(int argc, char **argv) {
     // call the pre-processor
     PreProccess(tokens.data);
 
-    // creates a new token at the start
-    Token tok = {.type = TOKEN_ID, .word = calloc(strlen("hello") + 1, sizeof(char))};
-    memcpy(tok.word, "hello", strlen("hello"));
-    Insert(&tokens, 0, &tok);
-
     // print all of them
     for (Token *token = tokens.data; token->type != TOKEN_EOF; token++) {
         if (token->word && token->type != TOKEN_NWLINE) {

@@ -8,7 +8,7 @@
 static PreProcStatmentType GetPreProcType(TokenType type) {
     switch (type)
     {
-        case TOKEN_PREPROC_ALIAS: return PREPROC_ALIAS;
+        case TOKEN_CONST: return PREPROC_CONST;
 
         default:
             printf("Illegal preprocessing statment.\n");
@@ -87,7 +87,7 @@ static void HandleToken(PreProcStatment *statment, Token *token) {
 
     // handle differently in function of the type of statment
     switch (statment->type) {
-        case PREPROC_ALIAS:
+        case PREPROC_CONST:
             if (tokcmp(statment->tokens + 2, token)) {
                 // swap 3 token with the current token
                 // free the previous token

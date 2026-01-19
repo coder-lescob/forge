@@ -17,7 +17,7 @@ typedef enum TokenType {
     TOKEN_NUMBER,
 
     // preproc
-    TOKEN_PREPROC_ALIAS,
+    TOKEN_CONST,
 
     TOKEN_EOF
 } TokenType;

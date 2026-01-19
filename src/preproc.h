@@ -8,7 +8,7 @@
 #include "token.h"
 
 typedef enum PPST {
-    PREPROC_ALIAS
+    PREPROC_CONST
 } PreProcStatmentType;
 
 typedef struct PPS {
