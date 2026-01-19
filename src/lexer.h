@@ -3,6 +3,7 @@
 
 // project
 #include "token.h"
+#include "stack.h"
 
 /*
 * Tokenizte a string into a list of token.

@@ -54,6 +54,11 @@ int main(int argc, char **argv) {
     // call the pre-processor
     PreProccess(tokens.data);
 
+    // duplicates the 1st token
+    Token tok = {.type = TOKEN_ID, .word = calloc(strlen("hello") + 1, sizeof(char))};
+    memcpy(tok.word, "hello", strlen("hello"));
+    Insert(&tokens, 0, &tok);
+
     // print all of them
     for (Token *token = tokens.data; token->type != TOKEN_EOF; token++) {
         if (token->word && token->type != TOKEN_NWLINE) {
@@ -73,8 +78,9 @@ int main(int argc, char **argv) {
         printf("Empty ast\n");
 
     for (Token *token = tokens.data; token->type != TOKEN_EOF; token++) {
-        if (token->word) {
+        if (token->word != NULL) {
             free(token->word);
+            token->word = NULL;
         }
     }
 

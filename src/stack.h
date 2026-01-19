@@ -53,4 +53,12 @@ typedef struct Stack {
         ((type *)stack.data)[--stack.ptr] \
         : 0 // 0 per default
 
+/*
+* Inserts a item at idx.
+* @param stack The pointer to the stack
+* @param idx   The index of the item to insert.
+* @param item  The pointer to the item of choice.
+*/
+void Insert(Stack *stack, size_t idx, void *item);
+
 #endif
