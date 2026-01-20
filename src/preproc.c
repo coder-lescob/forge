@@ -47,7 +47,7 @@ static Stack GetPreProcStatments(Token *tokens) {
             );
 
             // skip new line char
-            if (tokens[i].type == TOKEN_NWLINE) i++, size++;
+            if (tokens[i].type == TOKEN_NWLINE) i++;
 
             // create the proproc statment
             PreProcStatment statment = {
