@@ -18,8 +18,12 @@ static size_t flen(FILE *fptr) {
     return size + 1;
 }
 
-static void PrintNode(AST_Node *node, size_t indent) {
-    for (size_t i = 0; i < indent; i++) printf("\t");
+static void PrintNode(AST_Node *node, size_t indent, int last) {
+    for (size_t i = 1; i < indent; i++) printf("  ");
+    if (indent) {
+        if (last) printf("└─");
+        else      printf("├─"); 
+    }
     if (node && node->token && node->token->word)
         printf("node %s\n", node->token->word);
     else 
@@ -27,7 +31,7 @@ static void PrintNode(AST_Node *node, size_t indent) {
 
     if (node && node->nextnodes) {
         for (size_t i = 0; i < node->numnodes; i++) {
-            PrintNode(node->nextnodes[i], indent + 1);
+            PrintNode(node->nextnodes[i], indent + 1, i == node->numnodes - 1);
         }
     }
 }
@@ -73,7 +77,7 @@ int main(int argc, char **argv) {
     DestroySteelSyntax();
 
     if (ast)
-        PrintNode(ast, 0);
+        PrintNode(ast, 0, 1);
     else
         printf("Empty ast\n");
 
