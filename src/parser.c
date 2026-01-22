@@ -71,6 +71,19 @@ static AST_Node *DescentAST(AST ast, size_t symbol) {
     return ast;
 }
 
+static void FreeAST(AST ast) {
+    if (!ast) return /* was last node */ ;
+
+    // free all ast ressources
+    for (size_t i = 0; i < ast->numnodes; i++) {
+        free(ast->nextnodes[i]);
+    }
+    free(ast->nextnodes);
+
+    // finally free the ast itself
+    free(ast);
+}
+
 static void PushNode(AST ast, SyntaxNode *node, Token *token) {
     // descent the ast
     AST_Node *astnode = DescentAST(ast, node->symbol);
@@ -127,7 +140,7 @@ AST Parse(Token *tokens, Syntax *syntax) {
         // is it last token ?
         if (token->type == TOKEN_EOF) {
             // no tokens left will syntax still wants tokens, syntax error
-            return NULL;
+            goto syntaxerror;
         }
 
         // If token node
@@ -162,7 +175,7 @@ ret:
                 }
                 
                 // tokens left
-                return NULL;
+                goto syntaxerror;
             }
             else {
                 // get the last return address and put it in the current node
@@ -185,10 +198,14 @@ ret:
                 }
             }
             if (j == 0) {
-                return NULL;
+                goto syntaxerror;
             }
         }
     }
 
     return ast;
+
+syntaxerror:
+    FreeAST(ast);
+    return NULL;
 }
