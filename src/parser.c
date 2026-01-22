@@ -76,7 +76,7 @@ static void FreeAST(AST ast) {
 
     // free all ast ressources
     for (size_t i = 0; i < ast->numnodes; i++) {
-        free(ast->nextnodes[i]);
+        FreeAST(ast->nextnodes[i]);
     }
     free(ast->nextnodes);
 
