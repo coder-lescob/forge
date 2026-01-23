@@ -165,7 +165,7 @@ AST Parse(Token *tokens, Syntax *syntax) {
         }
         else {
             // syntax node
-            returninfo info = (returninfo){.node = node, .tokenptr = tokenptr - 1};
+            returninfo info = (returninfo){.node = node, .tokenptr = --tokenptr};
             Push(returnStack, info, returninfo);
             node = syntax->symboltable[node->syntax];
             continue; // don't inc nodeIdx
