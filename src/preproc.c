@@ -25,6 +25,21 @@ static size_t GetNumTokens(Token *tokens) {
     return numtokens;
 }
 
+static void CaptureErrors(PreProcStatment *statment) {
+    if (!statment) {
+        printf("invalid preproc statment.");
+        exit(-1);
+    }
+    switch (statment->type) {
+        case PREPROC_CONST:
+            if (statment->numtokens < 4) {
+                printf("missing %ld token in const pre-processing statment.\n", 4 - statment->numtokens);
+                exit(-1);
+            }
+            break;
+    }
+}
+
 static Stack GetPreProcStatments(Token *tokens) {
     // Create a stack of preproc statments
     Stack statments = CreateStack(500, PreProcStatment);
@@ -61,6 +76,9 @@ static Stack GetPreProcStatments(Token *tokens) {
 
             // erase tokens
             memmove(tokens + oldIdx, tokens + i, (numtokens - i + 1) * sizeof(Token));
+
+            // capture errors
+            CaptureErrors(&statment);
 
             // push it
             Push(statments, statment, PreProcStatment);
