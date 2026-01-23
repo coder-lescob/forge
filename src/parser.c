@@ -18,13 +18,15 @@ void InitSteelSyntax(void) {
         .numnodes = NUM_NODES
     };
 
-    steelsyntax.nodes[0]       = (SyntaxNode) {.tokentype = TOKEN_ID, .numnext = 2, .nextNodes = calloc(2, sizeof(SyntaxNode *))};
+    steelsyntax.nodes[0]              = (SyntaxNode) {.tokentype = TOKEN_ID, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
     steelsyntax.nodes[0].nextNodes[0] = &steelsyntax.nodes[1];
-    steelsyntax.nodes[0].nextNodes[1] = &steelsyntax.nodes[2];
 
-    steelsyntax.nodes[1]       = (SyntaxNode) {.tokentype = TOKEN_ID, .numnext = 0, .nextNodes = NULL};
-    steelsyntax.nodes[2]       = (SyntaxNode) {.tokentype = TOKEN_NUMBER, .numnext = 0, .nextNodes = NULL};
-    steelsyntax.symboltable[0] = &steelsyntax.nodes[0];
+    steelsyntax.nodes[1]              = (SyntaxNode) {.tokentype = TOKEN_EQUAL, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
+    steelsyntax.nodes[1].nextNodes[0] = &steelsyntax.nodes[2];
+
+    steelsyntax.nodes[2]              = (SyntaxNode) {.tokentype = TOKEN_NUMBER, .numnext = 0, .nextNodes = NULL};
+
+    steelsyntax.symboltable[0]        = &steelsyntax.nodes[0];
 }
 
 void DestroySteelSyntax(void) {
@@ -65,7 +67,7 @@ static AST_Node *DescentAST(AST ast, size_t symbol) {
         }
         else {
             // see further
-            DescentAST(node, symbol);
+            return DescentAST(node, symbol);
         }
     }
     return ast;

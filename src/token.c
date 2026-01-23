@@ -49,7 +49,8 @@ TokenType ClassifyToken(char *str) {
     static Token staticTokens[] = {
         {TOKEN_DOLLAR, "$"},
         {TOKEN_NWLINE, "\n"},
-        {TOKEN_CONST, "const"}
+        {TOKEN_CONST, "const"},
+        {TOKEN_EQUAL, "="}
     };
 
     for (size_t i = 0; i < (sizeof(staticTokens) / sizeof(Token)); i++) {

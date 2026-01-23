@@ -1,2 +1,2 @@
-$const test x
-print test
+$const test 25
+x = test

@@ -11,6 +11,7 @@ typedef enum TokenType {
     
     // symboles
     TOKEN_DOLLAR,
+    TOKEN_EQUAL,
     TOKEN_NWLINE,
 
     // litteral
