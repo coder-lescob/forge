@@ -120,8 +120,8 @@ static void PushNode(AST ast, SyntaxNode *node, Token *token) {
 
 // parses a list of token using syntax
 AST Parse(Token *tokens, Syntax *syntax) {
-    // Start seach from token 0 syntax node 0
 
+    // a structure to hold return info when returning to previous node
     typedef struct returninfo {
         SyntaxNode *node;
         size_t tokenptr;
@@ -129,8 +129,10 @@ AST Parse(Token *tokens, Syntax *syntax) {
 
     // should be enough depth
     Stack returnStack = CreateStack(500, returninfo);
+
+    // Start parsing from token 0 syntax node 0 of symbol .
     size_t tokenptr = 0ul;
-    SyntaxNode *node = &syntax->nodes[0];
+    SyntaxNode *node = syntax->symboltable[0];
 
     // create an ast
     AST ast = AllocatesAST_Node((AST_Node){.symbol = 0});
