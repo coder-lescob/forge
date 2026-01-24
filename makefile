@@ -8,8 +8,10 @@ TARGET := $(BIN_DIR)/forge
 MAKEFLAGS += --no-print-directory
 
 CC       := gcc
+ASM      := nasm
 OBJFLAGS := -c -g -Wall -Wextra -Wpedantic -I$(SRC)
 CFLAGS   := -Wall -Wextra -Wpedantic -g
+ASFLAGS  := -felf64
 
 SRC_C := $(wildcard $(SRC)/*.c)
 SRC_S := $(wildcard $(SRC)/*.s)
@@ -43,7 +45,7 @@ $(OBJ_DIR)/%.o: $(SRC)/%.c
 $(OBJ_DIR)/%.o: $(SRC)/%.s
 	@mkdir -p $(OBJ_DIR)
 	@echo "ASSEMBLING $< DONE"
-	@$(CC) $(OBJFLAGS) -c $< -o $@
+	@$(ASM) $(ASFLAGS) $< -o $@
 
 .PHONY: run
 run:

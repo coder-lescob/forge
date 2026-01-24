@@ -64,6 +64,12 @@ void InitSteelSyntax(void);
 void DestroySteelSyntax(void);
 
 /*
+* Frees the ast given.
+* @param ast The ast.
+*/
+void FreeAST(AST ast);
+
+/*
 * Parses a list of token finishing by the end of file token using the syntax provided.
 * @param tokens The list of token ending in a token of type TOKEN_EOF
 * @param syntax The syntax to use during parsing.

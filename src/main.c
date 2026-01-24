@@ -9,6 +9,7 @@
 #include "lexer.h"
 #include "preproc.h"
 #include "parser.h"
+#include "mem.h"
 
 static size_t flen(FILE *fptr) {
     size_t size = 0;
@@ -37,6 +38,16 @@ static void PrintNode(AST_Node *node, size_t indent, int last) {
 }
 
 int main(int argc, char **argv) {
+    int *a = calloc(1, sizeof(int));
+    int b = 25;
+    printf("heap var a at %lx\n", a);
+    printf("stack var b at %lx\n", &b);
+    printf("is heap a ?: %x\n", isheap(a));
+    printf("is heap b ?: %x\n", isheap(&b));
+    free(a);
+    return 0;
+
+
     if (argc < 2) {
         printf("usage: %s <filename>\n", argv[0]);
         exit(-1);
@@ -87,6 +98,8 @@ int main(int argc, char **argv) {
             token->word = NULL;
         }
     }
+
+    // free the ast
 
     FreeStack(tokens);
     fclose(fptr);

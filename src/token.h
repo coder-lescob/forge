@@ -5,6 +5,7 @@
 typedef enum TokenType {
     TOKEN_ILLEGAL,
     TOKEN_BLANK,
+    TOKEN_ROOT,
 
     // identifier
     TOKEN_ID,
