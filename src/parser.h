@@ -8,6 +8,11 @@
 #include "stack.h"
 #include "token.h"
 
+typedef enum AST_FLAG {
+    AST_FLAG_NULL = 0x00,
+    AST_FLAG_FREE = 0x01
+} AST_FLAG;
+
 // a node of syntax
 typedef struct SyntaxNode {
     // symbole or token
@@ -38,6 +43,9 @@ typedef struct AST_Node {
 
     // The token of the current node
     Token    *token;
+
+    // the flags of the current node
+    int flag;
 
     // The next nodes of this node
     struct AST_Node **nextnodes;

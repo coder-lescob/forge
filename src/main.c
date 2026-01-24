@@ -9,7 +9,6 @@
 #include "lexer.h"
 #include "preproc.h"
 #include "parser.h"
-#include "mem.h"
 
 static size_t flen(FILE *fptr) {
     size_t size = 0;
@@ -90,6 +89,7 @@ int main(int argc, char **argv) {
     }
 
     // free the ast
+    FreeAST(ast);
 
     FreeStack(tokens);
     fclose(fptr);

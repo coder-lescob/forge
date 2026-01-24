@@ -1,5 +1,4 @@
 #include "parser.h"
-#include "mem.h"
 #include <string.h>
 
 Syntax steelsyntax = {.numnodes = 0, .nodes = NULL, .numsymbols = 0, .symboltable = NULL};
@@ -84,11 +83,14 @@ void FreeAST(AST ast) {
     free(ast->nextnodes);
 
     // if there is still a word free it
-    if (ast->token && ast->token->word) {
-        if (isheap(ast->token)) {
+    if (ast->token) {
+        if (ast->token->word) {
+            free(ast->token->word);
+        }
+
+        if ((ast->flag & AST_FLAG_FREE) > 0) {
             free(ast->token);
         }
-        free(ast->token);
     }
 
     // finally free the ast itself
@@ -154,8 +156,10 @@ AST Parse(Token *tokens, Syntax *syntax) {
     SyntaxNode *node = syntax->symboltable[0];
 
     // create an ast
-    Token root = {.type = TOKEN_ROOT, .word = "hello"};
-    AST ast = AllocatesAST_Node((AST_Node){.symbol = 0, .token = &root});
+    Token *root = calloc(1, sizeof(Token));
+    *root = (Token) {.type = TOKEN_ROOT, .word = calloc(100, sizeof(char))};
+    memcpy(root->word, "root", sizeof("root"));
+    AST ast = AllocatesAST_Node((AST_Node){.symbol = ~0 /* all ones */, .token = root, .flag = AST_FLAG_FREE});
 
     while (node /* while node valid */) {
         // get the token
