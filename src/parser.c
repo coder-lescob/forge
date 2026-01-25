@@ -18,14 +18,14 @@ void InitSteelSyntax(void) {
         .numnodes = NUM_NODES
     };
 
-    steelsyntax.nodes[0]              = (SyntaxNode) {.tokentype = TOKEN_ID, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
+    steelsyntax.nodes[0]              = (SyntaxNode) {.tokentype = TOKEN_ID, .symbol = 0, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
     steelsyntax.nodes[0].nextNodes[0] = &steelsyntax.nodes[1];
 
-    steelsyntax.nodes[1]              = (SyntaxNode) {.tokentype = TOKEN_EQUAL, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
+    steelsyntax.nodes[1]              = (SyntaxNode) {.tokentype = TOKEN_EQUAL, .symbol = 0, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
     steelsyntax.nodes[1].nextNodes[0] = &steelsyntax.nodes[2];
 
-    steelsyntax.nodes[2]              = (SyntaxNode) {.tokentype = TOKEN_ILLEGAL, .syntax = 1, .numnext = 0, .nextNodes = NULL};
-    steelsyntax.nodes[3]              = (SyntaxNode) {.tokentype = TOKEN_NUMBER, .numnext = 0, .nextNodes = NULL};
+    steelsyntax.nodes[2]              = (SyntaxNode) {.tokentype = TOKEN_ILLEGAL, .symbol = 0, .syntax = 1, .numnext = 0, .nextNodes = NULL};
+    steelsyntax.nodes[3]              = (SyntaxNode) {.tokentype = TOKEN_NUMBER, .symbol = 1, .numnext = 0, .nextNodes = NULL};
 
     steelsyntax.symboltable[0]        = &steelsyntax.nodes[0];
     steelsyntax.symboltable[1]        = &steelsyntax.nodes[3];
