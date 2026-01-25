@@ -20,20 +20,23 @@ static size_t flen(FILE *fptr) {
 
 static void Indent(size_t indent, int last) {
     // renders indent - 1 bars to show previous branches going down
-    for (size_t i = 1; i < indent; i++) printf("│ ");
+    for (size_t i = 1; i < indent; i++) {
+        if (last) printf("  ");
+        else printf("│ ");
+    }
 
     // if there were any node before indent > 0
     if (indent) {
         // last one should be visally different
         if (last) printf("└─");
-        
+
         // Than a random node not at the end
         else      printf("├─"); 
     }
 }
 
 static void PrintNode(AST_Node *node, size_t indent, int last) {
-    Indent(indent, last);
+    // If node exist and node.token exists and it has a word
     if (node && node->token && node->token->word)
         printf("node %s of type 0x%lx\n", node->token->word, node->symbol);
     else 
@@ -41,6 +44,7 @@ static void PrintNode(AST_Node *node, size_t indent, int last) {
 
     if (node && node->nextnodes) {
         for (size_t i = 0; i < node->numnodes; i++) {
+            Indent(indent + 1, last);
             PrintNode(node->nextnodes[i], indent + 1, i == node->numnodes - 1);
         }
     }
