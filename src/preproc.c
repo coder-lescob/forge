@@ -110,10 +110,45 @@ static void RemoveComments(Stack *tokens, Stack *comments) {
 
         // if the current token is an open one
         if (token->type == TOKEN_OPEN_COMMENT) {
+            // loop over each next tokens until and EOF or CLOSE_COMMENT is found
             for (; token->type != TOKEN_EOF && token->type != TOKEN_CLOSE_COMMENT; token++) {
+                
+                // If the comments wants to be gathered
+                if (comments && token->type != TOKEN_OPEN_COMMENT /* Don't copy open comments */ ) {
+                    // push it
+                    Push((*comments), *token, Token);
+                }
+
+                // Removes it
                 Remove(tokens, token--);
             }
+
+            // Then remove the CLOSE_COMMENT if there is one
             if (token->type == TOKEN_CLOSE_COMMENT) {
+                Remove(tokens, token--);
+            }
+            else {
+                // comment open but never closed
+                fprintf(stderr, "comment open but never closed\n");
+                exit(-1);
+            }
+        }
+        else if (token->type == TOKEN_COMMENT) {
+            // loop over each next token until an EOF or NEW_LINE
+            for (; token->type != TOKEN_EOF && token->type != TOKEN_NWLINE; token++) {
+                
+                // If the comments wants to be gathered
+                if (comments && token->type != TOKEN_COMMENT /* Don't copy open comments */ ) {
+                    // push it
+                    Push((*comments), *token, Token);
+                }
+
+                // Removes it
+                Remove(tokens, token--);
+            }
+
+            // If there is a NEW_LINE remove it
+            if (token->type == TOKEN_NWLINE) {
                 Remove(tokens, token--);
             }
         }

@@ -51,6 +51,7 @@ TokenType ClassifyToken(char *str) {
         {TOKEN_DOLLAR, "$"},
         {TOKEN_NWLINE, "\n"},
         {TOKEN_CONST, "const"},
+        {TOKEN_DOT, "."},
 
         // math symbols
         {TOKEN_EQUAL, "="},

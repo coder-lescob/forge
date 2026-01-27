@@ -14,6 +14,7 @@ typedef enum TokenType {
     TOKEN_DOLLAR,
     TOKEN_EQUAL,
     TOKEN_NWLINE,
+    TOKEN_DOT,
 
     // math
     TOKEN_PLUS,
