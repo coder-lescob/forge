@@ -1,5 +1,6 @@
 #include "stack.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 void Insert(Stack *stack, size_t idx, void *item) {

@@ -23,6 +23,6 @@ typedef struct PPS {
 * @param tokens The pointer to the array of token.
 *   NOTE: THE LAST TOKEN SOULD HAVE TYPE TOKEN_EOF
 */
-void PreProccess(Stack *tokens);
+void PreProcess(Stack *tokens);
 
 #endif

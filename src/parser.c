@@ -167,6 +167,9 @@ AST Parse(Token *tokens, Syntax *syntax) {
         // get the token
         Token *token = &tokens[tokenptr++];
 
+        // if the current token is a new line continue
+        if (token->type == TOKEN_NWLINE) continue /* skip token */ ;
+
         // is it last token ?
         if (token->type == TOKEN_EOF) {
             // no tokens left, syntax still wants tokens, syntax error

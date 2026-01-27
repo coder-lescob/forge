@@ -110,7 +110,12 @@ static void RemoveComments(Stack *tokens, Stack *comments) {
 
         // if the current token is an open one
         if (token->type == TOKEN_OPEN_COMMENT) {
-            
+            for (; token->type != TOKEN_EOF && token->type != TOKEN_CLOSE_COMMENT; token++) {
+                Remove(tokens, token--);
+            }
+            if (token->type == TOKEN_CLOSE_COMMENT) {
+                Remove(tokens, token--);
+            }
         }
     }
 }
@@ -152,7 +157,10 @@ static void Process(PreProcStatment *statment, Stack *tokens) {
     }
 }
 
-void PreProccess(Stack *tokens) {
+void PreProcess(Stack *tokens) {
+    // Remove comments
+    RemoveComments(tokens, NULL);
+
     // get the statments
     Stack statments = GetPreProcStatments(tokens->data);
 

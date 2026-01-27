@@ -51,22 +51,6 @@ static void PrintNode(AST_Node *node, size_t indent, int last) {
 }
 
 int main(int argc, char **argv) {
-
-    Stack stackint = CreateStack(500, int);
-
-    for (int i = 0; i < 250; i++) {
-        Push(stackint, i, int);
-    }
-
-    Remove(&stackint, stackint.data);
-
-    for (size_t i = 0; i < stackint.ptr; i++) {
-        printf("%d\n", ((int *)stackint.data)[i]);
-    }
-
-    FreeStack(stackint);
-
-    return 0;
     if (argc < 2) {
         printf("usage: %s <filename>\n", argv[0]);
         exit(-1);
@@ -94,7 +78,7 @@ int main(int argc, char **argv) {
     Stack tokens = Tokenize(str);
 
     // call the pre-processor
-    PreProccess(&tokens);
+    PreProcess(&tokens);
 
     // print all of them
     for (Token *token = tokens.data; token->type != TOKEN_EOF; token++) {
