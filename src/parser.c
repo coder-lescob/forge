@@ -5,30 +5,32 @@ Syntax steelsyntax = {.numnodes = 0, .nodes = NULL, .numsymbols = 0, .symboltabl
 
 // build steel syntax
 void InitSteelSyntax(void) {
+    // syntax creation code (generated using gen_syntax.py) 
     // constants
     #define NUM_SYMBOLS 2
     #define NUM_NODES   4
-
+    
     steelsyntax = (Syntax) {
         // allocates space
         .symboltable = calloc(NUM_SYMBOLS, sizeof(SyntaxNode *)),
         .numsymbols  = NUM_SYMBOLS,
-
+    
         .nodes    = calloc(NUM_NODES, sizeof(SyntaxNode)),
         .numnodes = NUM_NODES
     };
-
-    steelsyntax.nodes[0]              = (SyntaxNode) {.tokentype = TOKEN_ID, .symbol = 0, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
+    
+    steelsyntax.nodes[0] = (SyntaxNode) {.tokentype = TOKEN_ID, .symbol = 0 , .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
     steelsyntax.nodes[0].nextNodes[0] = &steelsyntax.nodes[1];
-
-    steelsyntax.nodes[1]              = (SyntaxNode) {.tokentype = TOKEN_EQUAL, .symbol = 0, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
+    
+    steelsyntax.nodes[1] = (SyntaxNode) {.tokentype = TOKEN_EQUAL, .symbol = 0 , .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
     steelsyntax.nodes[1].nextNodes[0] = &steelsyntax.nodes[2];
-
-    steelsyntax.nodes[2]              = (SyntaxNode) {.tokentype = TOKEN_ILLEGAL, .symbol = 0, .syntax = 1, .numnext = 0, .nextNodes = NULL};
-    steelsyntax.nodes[3]              = (SyntaxNode) {.tokentype = TOKEN_NUMBER, .symbol = 1, .numnext = 0, .nextNodes = NULL};
-
-    steelsyntax.symboltable[0]        = &steelsyntax.nodes[0];
-    steelsyntax.symboltable[1]        = &steelsyntax.nodes[3];
+    
+    steelsyntax.nodes[2] = (SyntaxNode) {.tokentype = TOKEN_ILLEGAL, .symbol = 0 , .syntax = 1, .numnext = 0, .nextNodes = NULL};
+    
+    steelsyntax.nodes[3] = (SyntaxNode) {.tokentype = TOKEN_NUMBER, .symbol = 1 , .numnext = 0, .nextNodes = NULL};
+    
+    steelsyntax.symboltable[0] = &steelsyntax.nodes[0];
+    steelsyntax.symboltable[1] = &steelsyntax.nodes[3];
 }
 
 void DestroySteelSyntax(void) {
