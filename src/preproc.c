@@ -151,6 +151,9 @@ static void RemoveComments(Stack *tokens, Stack *comments) {
             if (token->type == TOKEN_NWLINE) {
                 Remove(tokens, token--);
             }
+            else if (token->type == TOKEN_EOF) {
+                break;
+            }
         }
     }
 }
