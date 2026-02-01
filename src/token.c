@@ -10,7 +10,7 @@ static int isid(char *str) {
 
     for (size_t i = 0; i < strlen(str); i++) {
         // belongs to [a; z] U [A; Z] U { _ }
-        if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'a' && str[i] <= 'z') || str[i] == '_') continue;
+        if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || str[i] == '_') continue;
 
         // belongs to [0; 9]
         if (i > 0 && str[i] >= '0' && str[i] <= '9') continue;

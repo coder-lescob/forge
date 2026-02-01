@@ -12,7 +12,7 @@
 
 static size_t flen(FILE *fptr) {
     size_t size = 0;
-    for (char c = 0; (c = fgetc(fptr)) != EOF; size++);
+    for (int c = 0; (c = fgetc(fptr)) != EOF; size++);
     fseek(fptr, 0, SEEK_SET);
 
     return size + 1;

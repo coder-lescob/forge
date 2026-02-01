@@ -11,9 +11,11 @@
 // The size of the buffer
 #define BUFFER_SIZE 64
 
-#define AddLetter(str, letter) \
-    str[strlen(str)] = letter; \
-    str[strlen(str)] = 0
+static void AddLetter(char *str, char letter) {
+    size_t len = strlen(str);
+    str[len    ] = letter;
+    str[len + 1] = 0;
+}
 
 static void ClassifyCurrentAndNext(char *buffer, char letter, TokenType *current, TokenType *next) {
 
@@ -68,7 +70,7 @@ static void AddToken(Stack *tokens, char *word, TokenType type) {
             tokens->data  = calloc((tokens->size + 1) * 2, tokens->isize);
 
             // copy old data into it
-            memcpy(tokens->data, oldptr, tokens->size);
+            memcpy(tokens->data, oldptr, tokens->size * tokens->isize);
 
             // signal to the stack its new size
             tokens->size = (tokens->size + 1) * 2;
