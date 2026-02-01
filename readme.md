@@ -18,7 +18,7 @@ In *Steel* a function can be flaged to return a pointer that should be freed and
 
 ## why Steel ?
 
-In metallurgy **Steel** is an alloy of **iron** and **carbon**. The **carbon** is really lite like, *C* is for programmers, while **iron** *rusts* in contact with **oxygene**. So *Steel* is an alloy, a mix, between *C* and *Rust*. Even if its name should be *inoxydable steel* to be accurate.
+In metallurgy **Steel** is an alloy of **iron** and **carbon**. The **carbon** is really lite, like *C* is for programmers, while **iron** *rusts* in contact with **oxygene**. So *Steel* is an alloy, a mix, between *C* and *Rust*. Even if its name should be *inoxydable steel* to be accurate.
 
 ## My old C++ version
 
