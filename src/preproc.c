@@ -130,9 +130,12 @@ static void RemoveComments(Stack *tokens, Stack *comments) {
                     // push it
                     Push((*comments), *token, Token);
                 }
+                else {
+                    // free it
+                    freetoken(token);
+                }
 
                 // Removes it
-                freetoken(token);
                 Remove(tokens, token--);
             }
 
@@ -156,9 +159,12 @@ static void RemoveComments(Stack *tokens, Stack *comments) {
                     // push it
                     Push((*comments), *token, Token);
                 }
+                else {
+                    // free it
+                    freetoken(token);
+                }
 
                 // Removes it
-                freetoken(token);
                 Remove(tokens, token--);
             }
 
