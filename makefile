@@ -19,7 +19,7 @@ OBJ_C := $(patsubst $(SRC)/%.c,$(OBJ_DIR)/%.o,$(SRC_C))
 OBJ_S := $(patsubst $(SRC)/%.s,$(OBJ_DIR)/%.o,$(SRC_S))
 ALLOBJ:= $(OBJ_C) $(OBJ_S)
 
-PROGRAM_INPUT := main.steel
+PROGRAM_INPUT := tests/main.steel
 
 .PHONY: all
 all: clean build run
