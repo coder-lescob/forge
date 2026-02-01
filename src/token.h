@@ -42,6 +42,7 @@ typedef enum TokenType {
 typedef struct Token {
     TokenType type;
     char     *word;
+    int      freed;
 } Token;
 
 /*
@@ -59,5 +60,11 @@ TokenType ClassifyToken(char *str);
 * @param b The second token.
 */
 int tokcmp(Token *a, Token *b);
+
+/*
+* Frees the string of a token.
+* @param token The token to be freed.
+*/
+void freetoken(Token *token);
 
 #endif

@@ -1,4 +1,5 @@
 // std libs
+#include <stdlib.h>
 #include <string.h>
 
 // project
@@ -48,24 +49,24 @@ TokenType ClassifyToken(char *str) {
 
     static Token staticTokens[] = {
         // preproc
-        {TOKEN_DOLLAR, "$"},
-        {TOKEN_NWLINE, "\n"},
-        {TOKEN_CONST, "const"},
-        {TOKEN_DOT, "."},
-        {TOKEN_OPEN_CURLY_BRACES, "{"},
-        {TOKEN_CLOSE_CURLY_BRACES, "}"},
+        {TOKEN_DOLLAR, "$", 1 /* string on stack no need to free */},
+        {TOKEN_NWLINE, "\n", 1 /* string on stack no need to free */},
+        {TOKEN_CONST, "const", 1 /* string on stack no need to free */},
+        {TOKEN_DOT, ".", 1 /* string on stack no need to free */},
+        {TOKEN_OPEN_CURLY_BRACES, "{", 1 /* string on stack no need to free */},
+        {TOKEN_CLOSE_CURLY_BRACES, "}", 1 /* string on stack no need to free */},
 
         // math symbols
-        {TOKEN_EQUAL, "="},
-        {TOKEN_PLUS, "+"},
-        {TOKEN_MINUS, "-"},
-        {TOKEN_STAR, "*"},
-        {TOKEN_SLASH, "/"},
+        {TOKEN_EQUAL, "=", 1 /* string on stack no need to free */},
+        {TOKEN_PLUS, "+", 1 /* string on stack no need to free */},
+        {TOKEN_MINUS, "-", 1 /* string on stack no need to free */},
+        {TOKEN_STAR, "*", 1 /* string on stack no need to free */},
+        {TOKEN_SLASH, "/", 1 /* string on stack no need to free */},
 
         // comments
-        {TOKEN_OPEN_COMMENT, "/*"},
-        {TOKEN_CLOSE_COMMENT, "*/"},
-        {TOKEN_COMMENT, "//"}
+        {TOKEN_OPEN_COMMENT, "/*", 1 /* string on stack no need to free */},
+        {TOKEN_CLOSE_COMMENT, "*/", 1 /* string on stack no need to free */},
+        {TOKEN_COMMENT, "//", 1 /* string on stack no need to free */}
     };
 
     for (size_t i = 0; i < (sizeof(staticTokens) / sizeof(Token)); i++) {
@@ -85,4 +86,16 @@ int tokcmp(Token *a, Token *b) {
     // If their type doesn't match, they don't
     if (a->type != b->type) return 0;
     return strcmp(a->word, b->word) == 0;
+}
+
+void freetoken(Token *token) {
+    // if needed free its string
+    if ((!token->freed) && token->word) {
+        // free it
+        free(token->word);
+
+        // ensure no double free
+        token->word  = NULL;
+        token->freed = 1;
+    }
 }

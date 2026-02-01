@@ -71,6 +71,11 @@ static Stack GetPreProcStatments(Token *tokens) {
                 .numtokens = size
             };
 
+            /*
+            * does a shallow copy of the tokens
+            * The caller to PreProcess must free all strings of all tokens
+            */
+
             // copy tokens
             memcpy(statment.tokens, tokens + oldIdx, statment.numtokens * sizeof(Token));
 
@@ -91,19 +96,26 @@ static Stack GetPreProcStatments(Token *tokens) {
     return statments;
 }
 
-static void FreeStatment(PreProcStatment statment) {
-    for (size_t i = 0; i < statment.numtokens; i++) {
+static void FreeStatment(PreProcStatment *statment) {
+    for (size_t i = 0; i < statment->numtokens; i++) {
         // free each string of each token
-        if (statment.tokens[i].word)
-            free(statment.tokens[i].word);
+        freetoken(&statment->tokens[i]);
     }
 
     // free the overall tokens
-    free(statment.tokens);
+    if (statment->tokens) {
+        free(statment->tokens);
+        statment->tokens    = NULL;
+        statment->numtokens = 0;
+    }
 }
 
 // remove all tokens part of a comment
 static void RemoveComments(Stack *tokens, Stack *comments) {
+
+    /*
+    * All tokens removed must have their strings be freed.
+    */
 
     // loop over each token
     for (Token *token = tokens->data; token->type != TOKEN_EOF; token++) {
@@ -120,11 +132,13 @@ static void RemoveComments(Stack *tokens, Stack *comments) {
                 }
 
                 // Removes it
+                freetoken(token);
                 Remove(tokens, token--);
             }
 
             // Then remove the CLOSE_COMMENT if there is one
             if (token->type == TOKEN_CLOSE_COMMENT) {
+                freetoken(token);
                 Remove(tokens, token--);
             }
             else {
@@ -144,11 +158,13 @@ static void RemoveComments(Stack *tokens, Stack *comments) {
                 }
 
                 // Removes it
+                freetoken(token);
                 Remove(tokens, token--);
             }
 
             // If there is a NEW_LINE remove it
             if (token->type == TOKEN_NWLINE) {
+                freetoken(token);
                 Remove(tokens, token--);
             }
             else if (token->type == TOKEN_EOF) {
@@ -210,7 +226,7 @@ void PreProcess(Stack *tokens) {
         Process(&s, tokens);
 
         // free every ressources
-        FreeStatment(s);
+        FreeStatment(&s);
     }
 
     FreeStack(statments);

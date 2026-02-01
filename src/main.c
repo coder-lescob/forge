@@ -109,10 +109,7 @@ int main(int argc, char **argv) {
 
     // free all tokens TODO: create a function to do so.
     for (Token *token = tokens.data; token->type != TOKEN_EOF; token++) {
-        if (token->word != NULL) {
-            free(token->word);
-            token->word = NULL;
-        }
+        freetoken(token);
     }
 
     // free the ast
