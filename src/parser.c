@@ -7,8 +7,8 @@ Syntax steelsyntax = {.numnodes = 0, .nodes = NULL, .numsymbols = 0, .symboltabl
 void InitSteelSyntax(void) {
     // syntax creation code (generated using gen_syntax.py) 
     // constants
-    #define NUM_SYMBOLS 3
-    #define NUM_NODES   5
+    #define NUM_SYMBOLS 4
+    #define NUM_NODES   8
 
     steelsyntax = (Syntax) {
         // allocates space
@@ -24,7 +24,7 @@ void InitSteelSyntax(void) {
     steelsyntax.nodes[1] = (SyntaxNode) {.tokentype = TOKEN_OPEN_CURLY_BRACES, .symbol = 1, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
     steelsyntax.nodes[1].nextNodes[0] = &steelsyntax.nodes[2];
 
-    steelsyntax.nodes[2] = (SyntaxNode) {.tokentype = TOKEN_ILLEGAL, .symbol = 1, .syntax = 2, .numnext = 2, .nextNodes = calloc(2, sizeof(SyntaxNode *))};
+    steelsyntax.nodes[2] = (SyntaxNode) {.tokentype = TOKEN_ILLEGAL, .symbol = 1, .syntax = 3, .numnext = 2, .nextNodes = calloc(2, sizeof(SyntaxNode *))};
     steelsyntax.nodes[2].nextNodes[0] = &steelsyntax.nodes[2];
     steelsyntax.nodes[2].nextNodes[1] = &steelsyntax.nodes[3];
 
@@ -32,9 +32,18 @@ void InitSteelSyntax(void) {
 
     steelsyntax.nodes[4] = (SyntaxNode) {.tokentype = TOKEN_NUMBER, .symbol = 2, .numnext = 0, .nextNodes = NULL};
 
+    steelsyntax.nodes[5] = (SyntaxNode) {.tokentype = TOKEN_ID, .symbol = 3, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
+    steelsyntax.nodes[5].nextNodes[0] = &steelsyntax.nodes[6];
+
+    steelsyntax.nodes[6] = (SyntaxNode) {.tokentype = TOKEN_EQUAL, .symbol = 3, .numnext = 1, .nextNodes = calloc(1, sizeof(SyntaxNode *))};
+    steelsyntax.nodes[6].nextNodes[0] = &steelsyntax.nodes[7];
+
+    steelsyntax.nodes[7] = (SyntaxNode) {.tokentype = TOKEN_ILLEGAL, .symbol = 3, .syntax = 2, .numnext = 0, .nextNodes = NULL};
+
     steelsyntax.symboltable[0] = &steelsyntax.nodes[0];
     steelsyntax.symboltable[1] = &steelsyntax.nodes[1];
     steelsyntax.symboltable[2] = &steelsyntax.nodes[4];
+    steelsyntax.symboltable[3] = &steelsyntax.nodes[5];
 }
 
 void DestroySteelSyntax(void) {
@@ -93,7 +102,7 @@ void FreeAST(AST ast) {
     // if there is still a word free it
     if (ast->token) {
         if (ast->token->word) {
-            free(ast->token->word);
+            freetoken(ast->token);
         }
 
         if ((ast->flag & AST_FLAG_FREE) > 0) {
@@ -137,7 +146,7 @@ static void PushNode(AST ast, SyntaxNode *node, Token *token) {
     }
 }
 
-static SyntaxNode *GetNextNode(SyntaxNode *node, Token *token) {
+static SyntaxNode *GetNextNode(SyntaxNode *node, Token *token, Stack *returnStack) {
     // no tokens left
     if (token->type == TOKEN_EOF) return NULL;
 
@@ -152,6 +161,15 @@ static SyntaxNode *GetNextNode(SyntaxNode *node, Token *token) {
             defaultNode = n;
         }
     }
+
+    if (!defaultNode) {
+        // see back
+        if (returnStack->ptr > 0) {
+            returninfo info = PopLast((*returnStack), returninfo);
+            return GetNextNode(info.node, token, returnStack);
+        }
+    }
+
     return defaultNode;
 }
 
@@ -171,12 +189,6 @@ static Token *GetNextToken(Token *tokens, size_t *tokenptr) {
 // parses a list of token using syntax
 AST Parse(Token *tokens, Syntax *syntax) {
 
-    // a structure to hold return info when returning to previous node
-    typedef struct returninfo {
-        SyntaxNode *node;
-        size_t tokenptr;
-    } returninfo;
-
     // should be enough depth
     Stack returnStack = CreateStack(500, returninfo);
 
@@ -194,20 +206,22 @@ AST Parse(Token *tokens, Syntax *syntax) {
         // get the token
         Token *token = &tokens[tokenptr++];
 
+        if (!token || token->type == TOKEN_EOF || token->type == TOKEN_ILLEGAL) {
+            // invalid token
+            goto syntaxerror;
+        }
+
         // if the current token is a new line continue
         if (token->type == TOKEN_NWLINE) continue /* skip token */ ;
 
         // debug print
-        // printf("Token %s %d    node %d\n", token->word, token->type, node->tokentype);
-
-        // is it last token ?
-        if (token->type == TOKEN_EOF) {
-            // no tokens left, syntax still wants tokens, syntax error
-            goto syntaxerror;
-        }
+        if (node)
+            printf("Token %s %d \t node %d\n", token->word, token->type, node->tokentype);
+        else
+            printf("Token %s %d \t node null\n", token->word, token->type);
 
         // If token node
-        else if (node->tokentype != TOKEN_ILLEGAL) {
+        if (node->tokentype != TOKEN_ILLEGAL) {
             // a blank node means, I needed another node but not another token
             if (node->tokentype == TOKEN_BLANK) {
                 tokenptr--;
@@ -235,7 +249,7 @@ AST Parse(Token *tokens, Syntax *syntax) {
             }
 
             // create and push return infos
-            returninfo info = (returninfo){.node = GetNextNode(node, tok), .tokenptr = tokenptr--};
+            returninfo info = (returninfo){.node = GetNextNode(node, tok, &returnStack), .tokenptr = tokenptr--};
             Push(returnStack, info, returninfo);
             
             // start over from the node in syntax
@@ -275,9 +289,9 @@ next:
             }
 
             // set the next node
-            node = GetNextNode(node, tok);
+            node = GetNextNode(node, tok, &returnStack);
         }
-
+        
         // If next node not valid
         if (!node) {
             // dead end

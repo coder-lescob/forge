@@ -55,6 +55,12 @@ typedef struct AST_Node {
 // The Abstract Syntax Tree representation in code
 typedef AST_Node *AST;
 
+// a structure to hold return info when returning to previous node
+typedef struct returninfo {
+    SyntaxNode *node;
+    size_t tokenptr;
+} returninfo;
+
 /*
 * allocates an AST_Node on the heap don't forget to free it.
 * @param node The node to allocate.

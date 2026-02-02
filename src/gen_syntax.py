@@ -105,13 +105,18 @@ def main():
     nodes = [
         Syntax_Node(Token_Type.TOKEN_ILLEGAL, next_nodes=[], symbol=Syntax_Type.MAIN, syntax=Syntax_Type.FRAME),
         Syntax_Node(Token_Type.TOKEN_OPEN_CURLY_BRACES, next_nodes=[2], symbol=Syntax_Type.FRAME),
-        Syntax_Node(Token_Type.TOKEN_ILLEGAL, next_nodes=[2, 3], symbol=Syntax_Type.FRAME, syntax=Syntax_Type.LITERAL),
+        Syntax_Node(Token_Type.TOKEN_ILLEGAL, next_nodes=[2, 3], symbol=Syntax_Type.FRAME, syntax=Syntax_Type.VAR_DECL),
         Syntax_Node(Token_Type.TOKEN_CLOSE_CURLY_BRACES, next_nodes=[], symbol=Syntax_Type.FRAME),
-        Syntax_Node(Token_Type.TOKEN_NUMBER, next_nodes=[], symbol=Syntax_Type.LITERAL)
+        Syntax_Node(Token_Type.TOKEN_NUMBER, next_nodes=[], symbol=Syntax_Type.LITERAL),
+        Syntax_Node(Token_Type.TOKEN_ID, next_nodes=[6], symbol=Syntax_Type.VAR_DECL),
+        Syntax_Node(Token_Type.TOKEN_EQUAL, next_nodes=[7], symbol=Syntax_Type.VAR_DECL),
+        Syntax_Node(Token_Type.TOKEN_ILLEGAL, next_nodes=[], symbol=Syntax_Type.VAR_DECL, syntax=Syntax_Type.LITERAL),
     ]
 
+    # print(nodes[7].syntax)
+
     symbol_table = [
-        0, 1, 4
+        0, 1, 4, 5
     ]
 
     steel_syntax = Syntax(nodes, symbol_table)

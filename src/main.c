@@ -44,6 +44,7 @@ static void PrintNode(AST_Node *node, size_t indent, int last) {
 
     if (node && node->nextnodes) {
         for (size_t i = 0; i < node->numnodes; i++) {
+            // size_t ind = (node->symbol != node->nextnodes[i]->symbol) ? indent + 1 : indent;
             Indent(indent + 1, last);
             PrintNode(node->nextnodes[i], indent + 1, i == node->numnodes - 1);
         }
