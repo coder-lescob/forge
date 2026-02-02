@@ -20,6 +20,22 @@ In *Steel* a function can be flaged to return a pointer that should be freed and
 
 In metallurgy **Steel** is an alloy of **iron** and **carbon**. The **carbon** is really lite, like *C* is for programmers, while **iron** *rusts* in contact with **oxygene**. So *Steel* is an alloy, a mix, between *C* and *Rust*. Even if its name should be *inoxydable steel* to be accurate.
 
+## The architecture of the compiler
+
+### The lexer
+
+First the **lexer** takes a string as input and outputs a list of word known in the medium as **tokens**. The **lexer** also classifies these **tokens** to some types because it is easier to analyse. My **lexer** works something like this, first there is a string called the *buffer* that stores the string of the *token* yet, then the **lexer** ask the function *ClassifyToken* to classify the string in the buffer to a *token type* and the string in the buffer plus the next letter of the *input*, then if the next is classified as an **illegal token** then a new token is created and the buffer is cleared. Also *spaces*, *tabulations* and *new lines* are classified as **blank tokens** and the token is simply not stored.
+
+### The preprocessor
+
+After the **lexer** comes the **preprocessor**. The job of the **preprocessor** is to remove *comments* and *expand macros*. A *macros* is a function that is simply *expanded* in to the list of tokens. For example a *macro* called **test** that is defined by the *number literal* **25**, the **preprocessor** will replace each token with a string of test with a token of type *number literal* and of value **25**. My **preprocessor** works about like so: first a macro is defined by a line stating with **$**, then the **preprocessor** fetches all lines starting by a dollar symbol and stores them in a special structure, then it will classify each of these structures using the first **token** after the dollar, finally it will loop over each of these structures and all **tokens** to find an intersection and then it replaces all tokens that needs to be replaces, then it is its job to free each **token** that wasn't used but removed from the token list to avoid memory leaks.
+
+### The parser
+
+This is the beast, by far the hardest module. The job of the **parser** is to analyse the syntax of the program to make it sens for the next module that will deeply analyse if the code is valid or if it doesn't make sens, it also produices a better way to represent the code which will be useful in the code generation step.
+
+This step is still a prototype yet.
+
 ## My old C++ version
 
 *Steel* is a language that I created in 2025, with my first version in *C++*, but the project came to a dead end when I wasn't able to implement nicely comments, the other reson of why I have abandoned the *C++* version is that I wanted to do it in *C* to challenge myself, also the **parser algorithm** wasn't optimal and I wanted to invent a new one.
