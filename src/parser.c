@@ -215,10 +215,10 @@ AST Parse(Token *tokens, Syntax *syntax) {
         if (token->type == TOKEN_NWLINE) continue /* skip token */ ;
 
         // debug print
-        if (node)
+        /*if (node)
             printf("Token %s %d \t node %d\n", token->word, token->type, node->tokentype);
         else
-            printf("Token %s %d \t node null\n", token->word, token->type);
+            printf("Token %s %d \t node null\n", token->word, token->type);*/
 
         // If token node
         if (node->tokentype != TOKEN_ILLEGAL) {
