@@ -67,7 +67,7 @@ class Syntax_Node:
         for i, next_idx in enumerate(self.next_nodes):
             print(f"steelsyntax.nodes[{idx}].nextNodes[{i}] = &steelsyntax.nodes[{next_idx}];")
 
-        print()
+        print(end="\n")
 
 class Syntax:
     def __init__(self, nodes: list[Syntax_Node], symbol_table: list[int]):
